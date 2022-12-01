@@ -1,0 +1,53 @@
+html {
+  background-color: rgba(235, 235, 235, 0.808);
+}
+.App {
+  background-color: rgba(235, 235, 235, 0.808);
+}
+
+.table {
+  max-width: fit-content;
+  margin: 50px;
+}
+
+.card {
+  min-height: 300px;
+  margin: 1rem 0;
+  position: absolute;
+  top: 50px;
+}
+
+.single-meal {
+  display: flex;
+  flex-direction: column;
+}
+
+.meal-img {
+  margin: 0;
+  padding: 0;
+  border-radius: 5px 5px 0 0;
+}
+
+.title {
+  padding: 1rem;
+  font-size: 1rem;
+  display: flex;
+  justify-content: space-between;
+}
+
+.title-small {
+  font-size: 1.2rem;
+  padding: 0.5rem;
+  display: flex;
+  justify-content: space-between;
+}
+.description {
+  padding: 1rem;
+  max-width: 1200px;
+  font-size: large;
+}
+
+.navbar { 
+position: absolute;
+top: 50px;
+}
