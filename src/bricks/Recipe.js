@@ -10,12 +10,12 @@ function matchIngredients(ingredientsInRecepies, ingredientsAll) {
   });
 }
 
-function Recipe(props) {
+function Recipe({ isLarge, key, recipe, allIngredients}) {
   const ingredientsMatched = matchIngredients(
-    props.recipe.ingredients,
-    props.allIngredients
+    recipe.ingredients,
+    allIngredients
   );
-  const [recipeData, setRecipeData] = useState(props.recipe);
+  const [recipeData, setRecipeData] = useState(recipe);
 
   return (
     <Card>
@@ -23,21 +23,21 @@ function Recipe(props) {
         <div className="single-meal">
           <img
             className="food-image"
-            src={props.recipe.imgUri}
+            src={recipe.imgUri}
             alt="recipe result"
           ></img>
-          <h1 className={props.isLarge ? "title" : "title-small"}>
-            {props.recipe.name}{" "}
+          <h1 className={isLarge ? "title" : "title-small"}>
+            {recipe.name}{" "}
             <CreateNewRecipeModal
-              allIngredients={props.allIngredients}
+              allIngredients={allIngredients}
               recipe={recipeData}
             />
           </h1>
           <Card.Text>
-            {props.isLarge ? (
-              <p className="text-truncate">{props.recipe.description}</p>
+            {isLarge ? (
+              <p className="text-truncate">{recipe.description}</p>
             ) : (
-              <p>{props.recipe.description}</p>
+              <p>{recipe.description}</p>
             )}
           </Card.Text>
           <ul>

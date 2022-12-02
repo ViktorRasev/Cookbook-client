@@ -24,7 +24,7 @@ function App() {
   let navigate = useNavigate();
 
   useEffect(() => {
-    fetch(`https://cookbook-server-nu.vercel.app/recipe/list`, {
+    fetch(`http://localhost:3000/recipe/list`, {
       method: "GET",
     }).then(async (response) => {
       const responseJson = await response.json();
@@ -33,11 +33,12 @@ function App() {
       } else {
         setCookbookLoadCall({ state: "success", data: responseJson });
       }
+      console.log(responseJson)
     });
   }, []);
 
   function getRecipesListDropdown() {
-        const isPending = cookbookLoadCall.state === "pending";
+    const isPending = cookbookLoadCall.state === "pending";
     const isLoaded = cookbookLoadCall.state === "success";
     const isError = cookbookLoadCall.state === "error";
 

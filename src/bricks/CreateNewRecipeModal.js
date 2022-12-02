@@ -5,15 +5,14 @@ import { useState, useEffect, useContext } from "react";
 import UserContext from "../UserProvider";
 import { Button, Modal, Form, Col, Row } from "react-bootstrap";
 
-function CreateNewRecipeModal(props) {
+function CreateNewRecipeModal({ allIngredients, onComplete, recipe }) {
   const { isAuthorized } = useContext(UserContext);
-  const onComplete = props.onComplete;
   const [isModalShown, setIsModalShown] = useState(false);
   const [validated, setValidated] = useState(false);
   const [addRecipeCall, setAddRecipeCall] = useState({
     state: "inactive",
   });
-console.log(isAuthorized)
+// console.log(isAuthorized)
   const defaultForm = {
     name: "",
     description: "",
@@ -22,19 +21,19 @@ console.log(isAuthorized)
   const [formData, setFormData] = useState(defaultForm);
 
   useEffect(() => {
-    if (props.recipe) {
+    if (recipe) {
       setFormData({
-        name: props.recipe.name,
-        description: props.recipe.description,
-        ingredients: props.recipe.ingredients,
+        name: recipe.name,
+        description: recipe.description,
+        ingredients: recipe.ingredients,
       });
     }
-  }, [props.recipe]);
+  }, [recipe]);
 
   const handleShowModal = (data) => setIsModalShown({ state: true, data });
   const handleCloseModal = () => {
     setIsModalShown({ state: false });
-    !props.recipe && setFormData(defaultForm);
+    !recipe && setFormData(defaultForm);
   };
 
   const setField = (name, val) => {
@@ -58,13 +57,14 @@ console.log(isAuthorized)
 
     const payload = {
       ...newData,
-      id: props.recipe ? props.recipe.id : null,
+      id: recipe ? recipe.id : null,
     };
 
     setAddRecipeCall({ state: "pending" });
 
     const res = await fetch(
-      `https://cookbook-server-nu.vercel.app/recipe/${props.recipe ? "update" : "create"}`,
+      // `https://cookbook-server-nu.vercel.app/recipe/${recipe ? "update" : "create"}`,
+      `http://localhost:3000/recipe/${recipe ? "update" : "create"}`,
       {
         method: "POST",
         headers: {
@@ -91,7 +91,7 @@ console.log(isAuthorized)
       <Modal show={isModalShown.state} onHide={handleCloseModal}>
         <Modal.Header closeButton={true}>
           <Modal.Title>
-            {props.recipe ? "Úprava receptu" : "Nový recept"}
+            {recipe ? "Úprava receptu" : "Nový recept"}
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
@@ -131,7 +131,7 @@ console.log(isAuthorized)
                 <Form.Select value={formData.ingredients.id} required>
                   <option value=""></option>
 
-                  {props.allIngredients.map((opt) => {
+                  {allIngredients.map((opt) => {
                     return <option value={opt.id}>{opt.name}</option>;
                   })}
                 </Form.Select>
@@ -190,10 +190,10 @@ console.log(isAuthorized)
                 ) : (
                   <>
                     <Icon
-                      path={props.recipe ? mdiPencilOutline : mdiPlus}
+                      path={recipe ? mdiPencilOutline : mdiPlus}
                       size={1}
                     />
-                    {props.recipe ? "Upravit recept" : "Pridat recept"}
+                    {recipe ? "Upravit recept" : "Pridat recept"}
                   </>
                 )}
               </Button>
@@ -202,7 +202,7 @@ console.log(isAuthorized)
         </Modal.Body>
       </Modal>
 
-      {props.recipe ? (
+      {recipe ? (
        isAuthorized && <Button
           style={{ cursor: "pointer", float: "right", height: "2.7rem" }}
           onClick={() => handleShowModal()}

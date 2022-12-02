@@ -1,9 +1,8 @@
 import React from "react";
 import Table from "react-bootstrap/Table";
 
-function RecipeTableList(props) {
+function RecipeTableList({ filteredRecipeList }) {
 
-  const recipeList = props.recipeList
 
   return (
     <Table>
@@ -14,7 +13,7 @@ function RecipeTableList(props) {
         </tr>
       </thead>
       <tbody>
-        {recipeList.map((recipe) => {
+        {filteredRecipeList.map((recipe) => {
           return (
             <tr key={recipe.name}>
               <td>{recipe.name}</td>

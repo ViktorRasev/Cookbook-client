@@ -10,7 +10,7 @@ import CreateNewRecipeModal from "./CreateNewRecipeModal";
 import Icon from "@mdi/react";
 import { mdiTable, mdiViewGridOutline, mdiMagnify } from "@mdi/js";
 
-function RecipeList(props) {
+function RecipeList({recipeList, allIngredients, onComplete}) {
   const [viewType, setViewType] = useState("grid");
   const isGrid = viewType === "grid";
 
@@ -21,7 +21,7 @@ function RecipeList(props) {
 
 
   const filteredRecipeList = useMemo(() => {
-    return props.recipeList.filter((item) => {
+    return recipeList.filter((item) => {
       return (
         item.name.toLocaleLowerCase().includes(searchBy.toLocaleLowerCase()) ||
         item.description
@@ -29,7 +29,7 @@ function RecipeList(props) {
           .includes(searchBy.toLocaleLowerCase())
       );
     });
-  }, [searchBy, props.recipeList]);
+  }, [searchBy, recipeList]);
 
   function handleSearch(event) {
     event.preventDefault();
@@ -40,7 +40,7 @@ function RecipeList(props) {
     if (!event.target.value) setSearchBy("");
   }
 
-  // console.log(props.recipeList)
+
 
 
   return (
@@ -91,8 +91,8 @@ function RecipeList(props) {
                 </Button>
               ) : null}
               <CreateNewRecipeModal 
-                allIngredients={props.allIngredients}
-                onComplete={props.onComplete}
+                allIngredients={allIngredients}
+                onComplete={onComplete}
               />
             </Form>
           </div>
@@ -101,12 +101,12 @@ function RecipeList(props) {
 
       {isGrid ? (
         <RecipeGridList
-          isLargeProp={isLarge}
-          recipeList={filteredRecipeList}
-          allIngredients={props.allIngredients}
+          isLarge={isLarge}
+          filteredRecipeList={filteredRecipeList}
+          allIngredients={allIngredients}
         />
       ) : (
-        <RecipeTableList recipeList={filteredRecipeList} />
+        <RecipeTableList filteredRecipeList={filteredRecipeList} />
       )}
     </div>
   );

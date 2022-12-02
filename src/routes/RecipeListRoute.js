@@ -27,7 +27,10 @@ function RecipeListRoute() {
   let recipeId = searchParams;
 
   useEffect(() => {
-    fetch(`https://cookbook-server-nu.vercel.app/recipe/list?id=${recipeId}`, {
+    fetch(`http://localhost:3000/recipe/list?id=${recipeId}`,
+      // `https://cookbook-server-nu.vercel.app/recipe/list?id=${recipeId}`, 
+    
+    {
       method: "GET",
     }).then(async (response) => {
       const responseJson = await response.json();
@@ -40,7 +43,9 @@ function RecipeListRoute() {
   }, [recipeId]);
 
   useEffect(() => {
-    fetch(`https://cookbook-server-nu.vercel.app/ingredient/list`, {
+    fetch(`http://localhost:3000/ingredient/list`,
+      // `https://cookbook-server-nu.vercel.app/ingredient/list`, 
+    {
       method: "GET",
     }).then(async (response) => {
       const responseJson = await response.json();
