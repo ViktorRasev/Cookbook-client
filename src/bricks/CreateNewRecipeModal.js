@@ -64,7 +64,7 @@ console.log(isAuthorized)
     setAddRecipeCall({ state: "pending" });
 
     const res = await fetch(
-      `http://localhost:3000/recipe/${props.recipe ? "update" : "create"}`,
+      `https://cookbook-server-nu.vercel.app/recipe/${props.recipe ? "update" : "create"}`,
       {
         method: "POST",
         headers: {
