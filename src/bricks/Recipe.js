@@ -10,13 +10,13 @@ function matchIngredients(ingredientsInRecepies, ingredientsAll) {
   });
 }
 
-function Recipe({ isLarge, key, recipe, allIngredients}) {
+function Recipe({ isLarge,  recipe, allIngredients}) {
   const ingredientsMatched = matchIngredients(
     recipe.ingredients,
     allIngredients
   );
   const [recipeData, setRecipeData] = useState(recipe);
-
+// console.log(recipe)
   return (
     <Card>
       <Card.Body>
@@ -36,13 +36,13 @@ function Recipe({ isLarge, key, recipe, allIngredients}) {
           <Card.Text>
             {isLarge ? (
               <p className="text-truncate">{recipe.description}</p>
-            ) : (
+            ) : ( 
               <p>{recipe.description}</p>
             )}
           </Card.Text>
           <ul>
             {ingredientsMatched.map((singleIngredient) => {
-              return <li>{singleIngredient}</li>;
+              return <li key={singleIngredient}>{singleIngredient}</li>;
             })}
           </ul>
         </div>

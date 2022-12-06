@@ -47,7 +47,13 @@ html {
   font-size: large;
 }
 
-.navbar { 
-position: absolute;
-top: 50px;
+.navbar {
+  position: absolute;
+  top: 50px;
+}
+
+@media (max-width: 750px) {
+  .add-recipe-btn {
+    width: 80vw;
+  }
 }

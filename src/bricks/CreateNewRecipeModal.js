@@ -3,7 +3,7 @@ import "../App.css";
 import { mdiPlus, mdiLoading, mdiPencilOutline } from "@mdi/js";
 import { useState, useEffect, useContext } from "react";
 import UserContext from "../UserProvider";
-import { Button, Modal, Form, Col, Row } from "react-bootstrap";
+import { Button, Modal, Form } from "react-bootstrap";
 
 function CreateNewRecipeModal({ allIngredients, onComplete, recipe }) {
   const { isAuthorized } = useContext(UserContext);
@@ -12,13 +12,15 @@ function CreateNewRecipeModal({ allIngredients, onComplete, recipe }) {
   const [addRecipeCall, setAddRecipeCall] = useState({
     state: "inactive",
   });
-// console.log(isAuthorized)
-  const defaultForm = {
+  // console.log(isAuthorized)
+
+  
+  // state for saving from data
+  const [formData, setFormData] = useState({
     name: "",
     description: "",
     ingredients: [],
-  };
-  const [formData, setFormData] = useState(defaultForm);
+  });
 
   useEffect(() => {
     if (recipe) {
@@ -30,18 +32,95 @@ function CreateNewRecipeModal({ allIngredients, onComplete, recipe }) {
     }
   }, [recipe]);
 
-  const handleShowModal = (data) => setIsModalShown({ state: true, data });
-  const handleCloseModal = () => {
-    setIsModalShown({ state: false });
-    !recipe && setFormData(defaultForm);
-  };
+  // for showing/ closing modal
+  const handleShowModal = () => setIsModalShown(true);
+  const handleCloseModal = () => setIsModalShown(false);
 
   const setField = (name, val) => {
     return setFormData((formData) => {
       const newData = { ...formData };
+      console.log(newData[name])
       newData[name] = val;
       return newData;
     });
+  };
+
+  const setIngredientField = (inputName, val, index) => {
+    return setFormData((formData) => {
+      const newData = { ...formData };
+      newData.ingredients[index][inputName] = val;
+      return newData;
+    });
+  };
+
+   // sort ingredients in alphabetical order
+  const sortedIngredients = allIngredients.sort((a, b) => { 
+    if(a.name < b.name){return -1}
+    if(a.name < b.name){return 1}
+    return 0
+  })
+
+  
+  // function to create new line of input group to add ingredient
+  const ingredientInputGroup = (ingredient, index) => {
+    return (
+      <div key={index} className={"d-flex justify-content-center gap-1"}>
+        <Form.Group className="mb1 u-75" controlId="ingredients">
+           {!index && <Form.Label>Ingredience</Form.Label>} 
+          <Form.Select value={ingredient.id} onChange={(e) => setIngredientField("id", e.target.value, index)}>
+              
+            {sortedIngredients.map((item) => {
+              return (
+                 <option key={item.id} value={item.id}>
+                  {item.name}
+                </option>
+              )
+            })}
+          </Form.Select>
+        </Form.Group>
+
+        <Form.Group className="mb-1" controlId="amount">
+          {!index && <Form.Label>Počet</Form.Label>}
+          <Form.Control
+            type="number"
+            value={ingredient.amount}
+            onChange={(e) => setIngredientField("amount", parseInt(e.target.value), index)}
+            required
+          />
+        </Form.Group>
+
+        <Form.Group className="mb-1" controlId="unit">
+         {!index && <Form.Label>Jednotka</Form.Label>}
+          <Form.Control value={ingredient.unit} onChange={(e) => setIngredientField("unit", e.target.value, index)} placeholder="napr. kg, ml" required/>
+        </Form.Group>
+        <Button onClick={() => removeIngredient(index)}>X</Button>
+      </div>
+    );
+  };
+
+  // default values when adding new ingredient (empty)
+  const emptyIngredient = () => {
+    return { amount: "", unit: "", id: "" };
+  };
+
+  // add new ingredient to an array of original ingredients
+  const addEmptyIngredient = () => {
+    const newFormData = {
+      ...formData,
+      ingredients: [...formData.ingredients, emptyIngredient()], 
+    };
+    setFormData(newFormData);
+  };
+
+  const removeIngredient = (index) => {
+    const newIngredients = [...formData.ingredients];
+    newIngredients.splice(index, 1);
+
+    const newFormData = {
+      ...formData,
+      ingredients: newIngredients,
+    };
+    setFormData(newFormData);
   };
 
   const handleSubmit = async (e) => {
@@ -54,7 +133,7 @@ function CreateNewRecipeModal({ allIngredients, onComplete, recipe }) {
     }
 
     const newData = { ...formData };
-
+    console.log(newData);
     const payload = {
       ...newData,
       id: recipe ? recipe.id : null,
@@ -86,20 +165,16 @@ function CreateNewRecipeModal({ allIngredients, onComplete, recipe }) {
     handleCloseModal(data);
   };
 
+
+
   return (
     <>
-      <Modal show={isModalShown.state} onHide={handleCloseModal}>
+      <Modal show={isModalShown} onHide={handleCloseModal}>
         <Modal.Header closeButton={true}>
-          <Modal.Title>
-            {recipe ? "Úprava receptu" : "Nový recept"}
-          </Modal.Title>
+          <Modal.Title>{recipe ? "Úprava receptu" : "Nový recept"}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <Form
-            noValidate
-            validated={validated}
-            onSubmit={(e) => handleSubmit(e)}
-          >
+          <Form noValidate validated={validated} onSubmit={(e) => handleSubmit(e)}>
             <Form.Group className="mb-3" controlId="nazev">
               <Form.Label>Název</Form.Label>
               <Form.Control
@@ -110,9 +185,7 @@ function CreateNewRecipeModal({ allIngredients, onComplete, recipe }) {
                 maxLength={15}
                 required
               />
-              <Form.Control.Feedback type="invalid">
-                Zadejte popis s minimální délkou 3 znaky
-              </Form.Control.Feedback>
+              <Form.Control.Feedback type="invalid">Zadejte popis s minimální délkou 3 znaky</Form.Control.Feedback>
             </Form.Group>
 
             <Form.Group className="mb-3" controlId="postup">
@@ -124,57 +197,19 @@ function CreateNewRecipeModal({ allIngredients, onComplete, recipe }) {
                 onChange={(e) => setField("description", e.target.value)}
                 required
               />
+               <Form.Control.Feedback type="invalid">Zadejte postup</Form.Control.Feedback>
             </Form.Group>
-            <Row>
-              <Form.Group as={Col} className="mb-3">
-                <Form.Label>Ingredience</Form.Label>
-                <Form.Select value={formData.ingredients.id} required>
-                  <option value=""></option>
 
-                  {allIngredients.map((opt) => {
-                    return <option value={opt.id}>{opt.name}</option>;
-                  })}
-                </Form.Select>
-                {}
-                <Form.Control.Feedback type="invalid">
-                  Zadejte jednu z možností
-                </Form.Control.Feedback>
-              </Form.Group>
+            {formData.ingredients.map((ing, index) => {
+              return ingredientInputGroup(ing, index);
+            })}
 
-              <Form.Group as={Col} className="mb-3">
-                <Form.Label>Počet</Form.Label>
-                <Form.Control
-                  value={formData.ingredients.amount}
-                  type="number"
-                  min="1"
-                  rows={1}
-                  placeholder="0"
-                  required
-                />
-                <Form.Control.Feedback type="invalid">
-                  Zadejte počet
-                </Form.Control.Feedback>
-              </Form.Group>
+            <Button onClick={addEmptyIngredient}>Přidat ingredienci</Button>
 
-              <Form.Group as={Col} className="mb-3">
-                <Form.Label>Jednotka</Form.Label>
-                <Form.Select value={formData.ingredients.unit} required>
-                  <option></option>
-                  <option>ks</option>
-                  <option>g</option>
-                  <option>ml</option>
-                </Form.Select>
-                <Form.Control.Feedback type="invalid">
-                  Zadejte jednu z možností
-                </Form.Control.Feedback>
-              </Form.Group>
-            </Row>
             <Modal.Footer>
               <div className="d-flex flex-row justify-content-between align-items-center w-100">
                 {addRecipeCall.state === "error" && (
-                  <div className="text-danger">
-                    Error: {addRecipeCall.error.errorMessage}
-                  </div>
+                  <div className="text-danger">Error: {addRecipeCall.error.errorMessage}</div>
                 )}
               </div>
               <Button
@@ -189,10 +224,7 @@ function CreateNewRecipeModal({ allIngredients, onComplete, recipe }) {
                   <Icon path={mdiLoading} size={0.8} spin={true} />
                 ) : (
                   <>
-                    <Icon
-                      path={recipe ? mdiPencilOutline : mdiPlus}
-                      size={1}
-                    />
+                    <Icon path={recipe ? mdiPencilOutline : mdiPlus} size={1} />
                     {recipe ? "Upravit recept" : "Pridat recept"}
                   </>
                 )}
@@ -203,15 +235,14 @@ function CreateNewRecipeModal({ allIngredients, onComplete, recipe }) {
       </Modal>
 
       {recipe ? (
-       isAuthorized && <Button
-          style={{ cursor: "pointer", float: "right", height: "2.7rem" }}
-          onClick={() => handleShowModal()}
-        >
-          <Icon size={0.8} path={mdiPencilOutline} />
-        </Button>
+        isAuthorized && (
+          <Button style={{ cursor: "pointer", float: "right" }} onClick={() => handleShowModal()}>
+            <Icon size={0.7} path={mdiPencilOutline} />
+          </Button>
+        )
       ) : (
         <Button
-           disabled={!isAuthorized}
+          disabled={!isAuthorized}
           className="add-recipe-btn"
           onClick={() => handleShowModal()}
           variant="outline-primary"
@@ -222,11 +253,7 @@ function CreateNewRecipeModal({ allIngredients, onComplete, recipe }) {
             border: "none",
           }}
         >
-          <Icon
-            path={mdiPlus}
-            style={{ cursor: "pointer" }}
-            size={1}
-          />
+          <Icon path={mdiPlus} style={{ cursor: "pointer" }} size={1} />
           Pridat recept
         </Button>
       )}

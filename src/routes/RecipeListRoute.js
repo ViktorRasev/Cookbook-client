@@ -2,8 +2,8 @@ import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import Icon from "@mdi/react";
 import { mdiLoading } from "@mdi/js";
-import RecipeList from "../bricks/RecipeList";
-import styles from "../css/classroom.module.css";
+import Header from "../bricks/Header";
+
 
 function RecipeListRoute() {
   const [ingredientsLoadCall, setIngredientsLoadCall] = useState({
@@ -15,6 +15,7 @@ function RecipeListRoute() {
 
   const handleRecipeAdded = (recipe) => {
     if (cookbookLoadCall.state === "succes") {
+      console.log(cookbookLoadCall)
       setCookbookLoadCall({
         state: "success",
         data: [...cookbookLoadCall.data, recipe],
@@ -69,14 +70,14 @@ function RecipeListRoute() {
   function getChild() {
     if (isPending) {
       return (
-        <div className={styles.loading}>
+        <div>
           <Icon size={2} path={mdiLoading} spin={true} />
         </div>
       );
     } else if (isLoaded) {
       return (
         <>
-          <RecipeList
+          <Header
             recipeList={cookbookLoadCall.data}
             allIngredients={ingredientsLoadCall.data}
             onComplete={(recipe) => handleRecipeAdded(recipe)}
@@ -85,7 +86,7 @@ function RecipeListRoute() {
       );
     } else if (isError) {
       return (
-        <div cookbook={styles.error}>
+        <div>
           <div>Recepty se nepodařilo načíst!</div>
           <br />
           <pre>{JSON.stringify(cookbookLoadCall.error, null, 2)}</pre>

@@ -1,7 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
 import "./App.css";
-
-
 import "bootstrap/dist/css/bootstrap.min.css";
 import Icon from "@mdi/react";
 import { mdiLoading, mdiAlertOctagonOutline } from "@mdi/js";
@@ -33,7 +31,6 @@ function App() {
       } else {
         setCookbookLoadCall({ state: "success", data: responseJson });
       }
-      console.log(responseJson)
     });
   }, []);
 
@@ -89,12 +86,12 @@ function App() {
         variant="light"
       >
         <Container fluid>
-          <Navbar.Brand onClick={() => navigate("/")}>Kucharka</Navbar.Brand>
+          <Nav.Link onClick={() => navigate("/")} style={{ fontSize: "1.5rem" }}>Kucharka</Nav.Link>
           <Navbar.Toggle aria-controls={`offcanvasNavbar-expand-sm`} />
           <Navbar.Offcanvas id={`offcanvasNavbar-expand-sm`}>
             <Offcanvas.Header closeButton>
               <Offcanvas.Title id={`offcanvasNavbarLabel-expand-sm`}>
-                Simple School
+                Kucharka
               </Offcanvas.Title>
             </Offcanvas.Header>
             <Offcanvas.Body>
