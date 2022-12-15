@@ -170,7 +170,6 @@ function CreateNewRecipeModal({ allIngredients, recipe }) {
     if (res.status >= 400) {
       setAddRecipeCall({ state: "error", error: data });
     } else {
-      // console.log(res.status)
       setAddRecipeCall({ state: "success", data });
       setRecipeEdited(!recipeEdited);
     }
@@ -180,6 +179,7 @@ function CreateNewRecipeModal({ allIngredients, recipe }) {
   const handleDeleteRecipe = async () => {
     const res = await fetch(
       `https://cookbook-server-nu.vercel.app/recipe/delete`,
+      // `http://localhost:3000/recipe/delete`,
       {
         method: "POST",
         headers: {
@@ -282,6 +282,7 @@ function CreateNewRecipeModal({ allIngredients, recipe }) {
                 style={{ float: "right", background: "green" }}
                 variant="success"
                 class="btn btn-success btn-sm"
+                // className={styles.add_update_recipe}
                 type="submit"
                 disabled={addRecipeCall.state === "pending"}
               >
