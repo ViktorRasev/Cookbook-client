@@ -46,7 +46,6 @@ function Header({ recipeList, allIngredients, onComplete, onRecipeEdited}) {
             
               <Form.Control
                 id={"searchInput"}
-                // style={{ maxWidth: "150px" }}
                 type="search"
                 placeholder="Hledat"
                 aria-label="Search"

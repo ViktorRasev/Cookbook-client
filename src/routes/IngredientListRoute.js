@@ -10,8 +10,7 @@ function IngredientsList() {
 
   useEffect(() => {
     fetch(
-      `http://localhost:3000/ingredient/list`,
-      // `https://cookbook-server-nu.vercel.app/ingredient/list`,
+      `https://cookbook-server-nu.vercel.app/ingredient/list`,
       {
         method: "GET",
       }

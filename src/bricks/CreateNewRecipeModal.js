@@ -157,8 +157,7 @@ function CreateNewRecipeModal({ allIngredients, recipe }) {
     setAddRecipeCall({ state: "pending" });
 
     const res = await fetch(
-      // `https://cookbook-server-nu.vercel.app/recipe/${recipe ? "update" : "create"}`,
-      `http://localhost:3000/recipe/${recipe ? "update" : "create"}`,
+      `https://cookbook-server-nu.vercel.app/recipe/${recipe ? "update" : "create"}`,
       {
         method: "POST",
         headers: {
@@ -180,8 +179,7 @@ function CreateNewRecipeModal({ allIngredients, recipe }) {
 
   const handleDeleteRecipe = async () => {
     const res = await fetch(
-      // `https://cookbook-server-nu.vercel.app/recipe/${recipe ? "update" : "create"}`,
-      `http://localhost:3000/recipe/delete`,
+      `https://cookbook-server-nu.vercel.app/recipe/delete`,
       {
         method: "POST",
         headers: {
@@ -284,7 +282,6 @@ function CreateNewRecipeModal({ allIngredients, recipe }) {
                 style={{ float: "right", background: "green" }}
                 variant="success"
                 class="btn btn-success btn-sm"
-                // className={styles.add_update_recipe}
                 type="submit"
                 disabled={addRecipeCall.state === "pending"}
               >

@@ -2,12 +2,10 @@ import { useEffect, useState, useContext } from "react";
 import Icon from "@mdi/react";
 import { mdiLoading } from "@mdi/js";
 import Header from "../bricks/Header";
-import RecipeEditedContext from '../RecipeEditedContext';
-
-
+import RecipeEditedContext from "../RecipeEditedContext";
 
 function RecipeListRoute() {
-  const { recipeEdited } = useContext(RecipeEditedContext)
+  const { recipeEdited } = useContext(RecipeEditedContext);
   const [ingredientsLoadCall, setIngredientsLoadCall] = useState({
     state: "pending",
   });
@@ -16,10 +14,7 @@ function RecipeListRoute() {
   });
 
   useEffect(() => {
-    fetch(`http://localhost:3000/recipe/list`,
-      // `https://cookbook-server-nu.vercel.app/recipe/list?id=${recipeId}`, 
-    
-    {
+    fetch(`https://cookbook-server-nu.vercel.app/recipe/list`, {
       method: "GET",
     }).then(async (response) => {
       const responseJson = await response.json();
@@ -27,17 +22,12 @@ function RecipeListRoute() {
         setCookbookLoadCall({ state: "error", error: responseJson });
       } else {
         setCookbookLoadCall({ state: "success", data: responseJson });
-        
       }
-
     });
   }, [recipeEdited]);
 
-
   useEffect(() => {
-    fetch(`http://localhost:3000/ingredient/list`,
-      // `https://cookbook-server-nu.vercel.app/ingredient/list`, 
-    {
+    fetch(`https://cookbook-server-nu.vercel.app/ingredient/list`, {
       method: "GET",
     }).then(async (response) => {
       const responseJson = await response.json();
@@ -49,14 +39,9 @@ function RecipeListRoute() {
     });
   }, [recipeEdited]);
 
-  const isPending =
-    cookbookLoadCall.state === "pending" ||
-    ingredientsLoadCall.state === "pending";
-  const isLoaded =
-    cookbookLoadCall.state === "success" ||
-    ingredientsLoadCall.state === "success";
-  const isError =
-    cookbookLoadCall.state === "error" || ingredientsLoadCall.state === "error";
+  const isPending = cookbookLoadCall.state === "pending" || ingredientsLoadCall.state === "pending";
+  const isLoaded = cookbookLoadCall.state === "success" || ingredientsLoadCall.state === "success";
+  const isError = cookbookLoadCall.state === "error" || ingredientsLoadCall.state === "error";
 
   function getChild() {
     if (isPending) {
@@ -68,11 +53,7 @@ function RecipeListRoute() {
     } else if (isLoaded) {
       return (
         <>
-          <Header
-            recipeList={cookbookLoadCall.data}
-            allIngredients={ingredientsLoadCall.data}
-          />
-          
+          <Header recipeList={cookbookLoadCall.data} allIngredients={ingredientsLoadCall.data} />
         </>
       );
     } else if (isError) {

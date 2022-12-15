@@ -3,7 +3,6 @@ import { useSearchParams } from "react-router-dom";
 import { Card, Container } from "react-bootstrap";
 import styles from "../css/RecipeDetailRoute.module.css";
 
-
 export default function RecipeDetailRoute() {
   const [recipeList, setRecipeList] = useState({
     state: "pending",
@@ -12,22 +11,14 @@ export default function RecipeDetailRoute() {
     state: "pending",
   });
 
-  // console.log(recipeWithIngredients.ingredients.length)
-  // fetch vsetky ingrediencie porovnat ich IDcka s IDckami konkretneho receptu a vyhodit ich do DOMu
-
   let [searchParams] = useSearchParams();
 
   let recipeId = searchParams.get("id");
 
   useEffect(() => {
-    fetch(
-      `http://localhost:3000/recipe/list`,
-      // `https://cookbook-server-nu.vercel.app/recipe/list?id=${recipeId}`,
-
-      {
-        method: "GET",
-      }
-    ).then(async (response) => {
+    fetch(`https://cookbook-server-nu.vercel.app/recipe/list`, {
+      method: "GET",
+    }).then(async (response) => {
       const responseJson = await response.json();
       if (response.status >= 400) {
         setRecipeList({ state: "error", error: responseJson });
@@ -38,13 +29,9 @@ export default function RecipeDetailRoute() {
   }, [recipeId]);
 
   useEffect(() => {
-    fetch(
-      `http://localhost:3000/ingredient/list`,
-      // `https://cookbook-server-nu.vercel.app/ingredient/list`,
-      {
-        method: "GET",
-      }
-    ).then(async (response) => {
+    fetch(`https://cookbook-server-nu.vercel.app/ingredient/list`, {
+      method: "GET",
+    }).then(async (response) => {
       const responseJson = await response.json();
       if (response.status >= 400) {
         setIngredientList({ state: "error", error: responseJson });
@@ -61,13 +48,6 @@ export default function RecipeDetailRoute() {
   const getRecipe = () => {
     if (isLoaded) {
       let allIngredients = ingredientList.data;
-
-      // prvy napad: vytvorit funkciu ktora bude mat ako prameter indexy a nejak to zarovnat netusim jak
-      // druhy : vytvorit state alebo funkciu podobnu ako v componente CreateNewRecipeModal const emptyIngredient = () => {
-      //   return { amount: "", unit: "", id: "" };
-      // };
-      // do ktoreho sa bude ukladat vsetko naraz a potom sa to bude az renderovat
-      // alebo rovno cely objekt ktory bude mat meno description a array of ingredients
 
       const recipe = recipeList.data.find((oneRecipe) => {
         return oneRecipe.id === recipeId;
@@ -97,13 +77,13 @@ export default function RecipeDetailRoute() {
               </Card.Title>
               <Card.Text>{result.description}</Card.Text>
               <Card.Text className={styles.ingredients}>
-            <h2>Ingredience</h2>
-            <ul>
-              {result.ingredients.map((ingredient, index) => { 
-                return <li key={index}>{`${ingredient.amount} ${ingredient.unit} - ${ingredient.name.name}`}</li>
-              })}
-            </ul>
-            </Card.Text>
+                <h2>Ingredience</h2>
+                <ul>
+                  {result.ingredients.map((ingredient, index) => {
+                    return <li key={index}>{`${ingredient.amount} ${ingredient.unit} - ${ingredient.name.name}`}</li>;
+                  })}
+                </ul>
+              </Card.Text>
             </Card.Body>
           </Card>
         </Container>
@@ -119,8 +99,7 @@ export default function RecipeDetailRoute() {
           <div>Loading</div>
         </>
       );
-    } 
-    else if(isError){
+    } else if (isError) {
       return (
         <>
           <h1>ERROR</h1>
