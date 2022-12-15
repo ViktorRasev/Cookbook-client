@@ -1,0 +1,68 @@
+.remove_ing_btn {
+  background-color: transparent;
+  color: black;
+  border: none;
+  height: 2.5rem;
+  width: 2.5rem;
+  display: flex;
+  align-items: center;
+}
+
+.remove_ing_btn:hover {
+  background-color: transparent;
+  color: red;
+}
+
+.remove_ing_btn_0 {
+  background-color: transparent;
+  margin-top: 2rem;
+}
+
+.single_ingredient_to_add {
+  display: flex;
+  justify-content: center;
+  gap: 3px;
+}
+.add_ingredient_btn {
+  margin: 1rem 0;
+  display: flex;
+
+
+}
+
+
+.add_update_recipe {
+  display: flex;
+  align-items: center;
+  background-color: green;
+  color: white;
+  border: green;
+  padding: 6px 12px;
+  border-radius: 6px;
+}
+
+
+
+
+.popover_header { 
+    background-color: #dc3545;
+    color: white;
+    position: relative;
+}
+.close_popover_btn { 
+    background-color: transparent;
+    border: none;
+    color:white ;
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+
+.close_popover_btn:hover { 
+    background-color: transparent!important;
+}
+
+.popover_body { 
+    display: flex;
+    justify-content: space-around;
+}

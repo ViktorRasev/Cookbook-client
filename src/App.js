@@ -1,7 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
 import "./App.css";
-
-
 import "bootstrap/dist/css/bootstrap.min.css";
 import Icon from "@mdi/react";
 import { mdiLoading, mdiAlertOctagonOutline } from "@mdi/js";
@@ -16,7 +14,7 @@ import { Outlet, useNavigate } from "react-router-dom";
 import { NavLink } from "react-bootstrap";
 
 function App() {
-  const { isAuthorized } = useContext(UserContext);
+  const  {isAuthorized, setIsAuthorized}  = useContext(UserContext);
   const [cookbookLoadCall, setCookbookLoadCall] = useState({
     state: "pending",
   });
@@ -24,7 +22,7 @@ function App() {
   let navigate = useNavigate();
 
   useEffect(() => {
-    fetch(`https://cookbook-server-nu.vercel.app/recipe/list`, {
+    fetch(`http://localhost:3000/recipe/list`, {
       method: "GET",
     }).then(async (response) => {
       const responseJson = await response.json();
@@ -37,7 +35,7 @@ function App() {
   }, []);
 
   function getRecipesListDropdown() {
-        const isPending = cookbookLoadCall.state === "pending";
+    const isPending = cookbookLoadCall.state === "pending";
     const isLoaded = cookbookLoadCall.state === "success";
     const isError = cookbookLoadCall.state === "error";
 
@@ -50,8 +48,10 @@ function App() {
     } else if (isLoaded) {
       return (
         <>
-          <NavLink>{isAuthorized ? "Přihlášen" : "Nepřihlášen"}</NavLink>
-          <NavDropdown title="Select Recipe" id="navbarScrollingDropdown">
+          <NavLink onClick={() => setIsAuthorized(!isAuthorized)}>
+            {isAuthorized ? "Přihlášen" : "Nepřihlášen"}
+          </NavLink>
+          <NavDropdown title="Vyberte recept" id="navbarScrollingDropdown">
             {cookbookLoadCall.data.map((singleRecipe) => {
               return (
                 <NavDropdown.Item
@@ -88,20 +88,17 @@ function App() {
         variant="light"
       >
         <Container fluid>
-          <Navbar.Brand onClick={() => navigate("/")}>Kucharka</Navbar.Brand>
+          <Nav.Link onClick={() => navigate("/")} style={{ fontSize: "1.5rem" }}>Kucharka</Nav.Link>
           <Navbar.Toggle aria-controls={`offcanvasNavbar-expand-sm`} />
           <Navbar.Offcanvas id={`offcanvasNavbar-expand-sm`}>
             <Offcanvas.Header closeButton>
               <Offcanvas.Title id={`offcanvasNavbarLabel-expand-sm`}>
-                Simple School
+                Kucharka
               </Offcanvas.Title>
             </Offcanvas.Header>
             <Offcanvas.Body>
               <Nav className="justify-content-end flex-grow-1 pe-3">
                 {getRecipesListDropdown()}
-                <Nav.Link onClick={() => navigate("/recipeList")}>
-                  Recepty
-                </Nav.Link>
                 <Nav.Link onClick={() => navigate("/ingredientList")}>
                   Ingredience
                 </Nav.Link>
