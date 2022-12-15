@@ -16,17 +16,16 @@ function Recipe({ isLarge,  recipe, allIngredients}) {
     allIngredients
   );
   const [recipeData, setRecipeData] = useState(recipe);
-// console.log(recipe)
   return (
-    <Card>
-      <Card.Body>
+    <Card className="d-flex-justify-content-start">
+      <Card.Body >
         <div className="single-meal">
-          <img
+         {recipe.imgUri && <img
             className="food-image"
             src={recipe.imgUri}
             alt="recipe result"
-          ></img>
-          <h1 className={isLarge ? "title" : "title-small"}>
+         />}
+          <h1 className={isLarge ? "title" : "title-small"} >
             {recipe.name}{" "}
             <CreateNewRecipeModal
               allIngredients={allIngredients}

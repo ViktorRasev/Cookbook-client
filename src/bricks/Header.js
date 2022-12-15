@@ -8,7 +8,7 @@ import Icon from "@mdi/react";
 import { mdiTable, mdiViewGridOutline, mdiMagnify } from "@mdi/js";
 import styles from "../css/RecipeList.module.css";
 
-function Header({ recipeList, allIngredients, onComplete }) {
+function Header({ recipeList, allIngredients, onComplete, onRecipeEdited}) {
   const [viewType, setViewType] = useState("grid");
   const isGrid = viewType === "grid";
 
@@ -35,12 +35,15 @@ function Header({ recipeList, allIngredients, onComplete }) {
     if (!event.target.value) setSearchBy("");
   }
 
+
+
   return (
     <div>
       <Navbar bg="light">
         <Container fluid className={styles.header_container}>
           <div className={styles.header_buttons}>
             <Form className={styles.search_form} onSubmit={handleSearch}>
+            
               <Form.Control
                 id={"searchInput"}
                 // style={{ maxWidth: "150px" }}
@@ -53,7 +56,6 @@ function Header({ recipeList, allIngredients, onComplete }) {
                 <Icon size={1} path={mdiMagnify} />
               </Button>
             </Form>
-
             <Button
               className={styles.table_grid_button}
               variant="outline-primary"
@@ -81,7 +83,7 @@ function Header({ recipeList, allIngredients, onComplete }) {
             ) : null}
           </div>
 
-          <CreateNewRecipeModal allIngredients={allIngredients} onComplete={onComplete} />
+          <CreateNewRecipeModal allIngredients={allIngredients} onComplete={onComplete}  />
         </Container>
       </Navbar>
 

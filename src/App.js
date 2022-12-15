@@ -14,7 +14,7 @@ import { Outlet, useNavigate } from "react-router-dom";
 import { NavLink } from "react-bootstrap";
 
 function App() {
-  const { isAuthorized } = useContext(UserContext);
+  const  {isAuthorized, setIsAuthorized}  = useContext(UserContext);
   const [cookbookLoadCall, setCookbookLoadCall] = useState({
     state: "pending",
   });
@@ -48,8 +48,10 @@ function App() {
     } else if (isLoaded) {
       return (
         <>
-          <NavLink>{isAuthorized ? "Přihlášen" : "Nepřihlášen"}</NavLink>
-          <NavDropdown title="Select Recipe" id="navbarScrollingDropdown">
+          <NavLink onClick={() => setIsAuthorized(!isAuthorized)}>
+            {isAuthorized ? "Přihlášen" : "Nepřihlášen"}
+          </NavLink>
+          <NavDropdown title="Vyberte recept" id="navbarScrollingDropdown">
             {cookbookLoadCall.data.map((singleRecipe) => {
               return (
                 <NavDropdown.Item
@@ -97,9 +99,6 @@ function App() {
             <Offcanvas.Body>
               <Nav className="justify-content-end flex-grow-1 pe-3">
                 {getRecipesListDropdown()}
-                <Nav.Link onClick={() => navigate("/recipeList")}>
-                  Recepty
-                </Nav.Link>
                 <Nav.Link onClick={() => navigate("/ingredientList")}>
                   Ingredience
                 </Nav.Link>

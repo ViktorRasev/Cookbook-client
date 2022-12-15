@@ -1,11 +1,13 @@
-import { useEffect, useState } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useEffect, useState, useContext } from "react";
 import Icon from "@mdi/react";
 import { mdiLoading } from "@mdi/js";
 import Header from "../bricks/Header";
+import RecipeEditedContext from '../RecipeEditedContext';
+
 
 
 function RecipeListRoute() {
+  const { recipeEdited } = useContext(RecipeEditedContext)
   const [ingredientsLoadCall, setIngredientsLoadCall] = useState({
     state: "pending",
   });
@@ -13,22 +15,8 @@ function RecipeListRoute() {
     state: "pending",
   });
 
-  const handleRecipeAdded = (recipe) => {
-    if (cookbookLoadCall.state === "succes") {
-      console.log(cookbookLoadCall)
-      setCookbookLoadCall({
-        state: "success",
-        data: [...cookbookLoadCall.data, recipe],
-      });
-    }
-  };
-
-  let [searchParams] = useSearchParams();
-
-  let recipeId = searchParams;
-
   useEffect(() => {
-    fetch(`http://localhost:3000/recipe/list?id=${recipeId}`,
+    fetch(`http://localhost:3000/recipe/list`,
       // `https://cookbook-server-nu.vercel.app/recipe/list?id=${recipeId}`, 
     
     {
@@ -39,9 +27,12 @@ function RecipeListRoute() {
         setCookbookLoadCall({ state: "error", error: responseJson });
       } else {
         setCookbookLoadCall({ state: "success", data: responseJson });
+        
       }
+
     });
-  }, [recipeId]);
+  }, [recipeEdited]);
+
 
   useEffect(() => {
     fetch(`http://localhost:3000/ingredient/list`,
@@ -56,7 +47,7 @@ function RecipeListRoute() {
         setIngredientsLoadCall({ state: "success", data: responseJson });
       }
     });
-  }, []);
+  }, [recipeEdited]);
 
   const isPending =
     cookbookLoadCall.state === "pending" ||
@@ -80,8 +71,8 @@ function RecipeListRoute() {
           <Header
             recipeList={cookbookLoadCall.data}
             allIngredients={ingredientsLoadCall.data}
-            onComplete={(recipe) => handleRecipeAdded(recipe)}
           />
+          
         </>
       );
     } else if (isError) {

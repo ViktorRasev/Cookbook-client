@@ -5,7 +5,7 @@ function RecipeTableList({ filteredRecipeList }) {
 
 
   return (
-    <Table>
+    <Table style={{maxWidth: "80vw", margin: "4rem auto 2rem auto"}}>
       <thead>
         <tr>
           <th>Název</th>

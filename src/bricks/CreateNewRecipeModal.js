@@ -1,20 +1,21 @@
 import Icon from "@mdi/react";
 import "../App.css";
-import { mdiPlus, mdiLoading, mdiPencilOutline } from "@mdi/js";
-import { useState, useEffect, useContext } from "react";
+import { mdiPlus, mdiLoading, mdiPencilOutline, mdiDeleteForever, mdiCarrot, mdiClose } from "@mdi/js";
+import { useState, useEffect, useContext, useRef } from "react";
+import { Button, Modal, Form, Popover, Overlay } from "react-bootstrap";
 import UserContext from "../UserProvider";
-import { Button, Modal, Form } from "react-bootstrap";
+import RecipeEditedContext from "../RecipeEditedContext";
+import styles from "../css/CreateNewRecipeModal.module.css";
 
-function CreateNewRecipeModal({ allIngredients, onComplete, recipe }) {
+function CreateNewRecipeModal({ allIngredients, recipe }) {
   const { isAuthorized } = useContext(UserContext);
+  const { recipeEdited, setRecipeEdited } = useContext(RecipeEditedContext);
   const [isModalShown, setIsModalShown] = useState(false);
   const [validated, setValidated] = useState(false);
   const [addRecipeCall, setAddRecipeCall] = useState({
     state: "inactive",
   });
-  // console.log(isAuthorized)
 
-  
   // state for saving from data
   const [formData, setFormData] = useState({
     name: "",
@@ -39,7 +40,7 @@ function CreateNewRecipeModal({ allIngredients, onComplete, recipe }) {
   const setField = (name, val) => {
     return setFormData((formData) => {
       const newData = { ...formData };
-      console.log(newData[name])
+      console.log(newData[name]);
       newData[name] = val;
       return newData;
     });
@@ -53,28 +54,31 @@ function CreateNewRecipeModal({ allIngredients, onComplete, recipe }) {
     });
   };
 
-   // sort ingredients in alphabetical order
-  const sortedIngredients = allIngredients.sort((a, b) => { 
-    if(a.name < b.name){return -1}
-    if(a.name < b.name){return 1}
-    return 0
-  })
+  // sort ingredients in alphabetical order
+  const sortedIngredients = allIngredients.sort((a, b) => {
+    if (a.name < b.name) {
+      return -1;
+    }
+    if (a.name < b.name) {
+      return 1;
+    }
+    return 0;
+  });
 
-  
   // function to create new line of input group to add ingredient
   const ingredientInputGroup = (ingredient, index) => {
     return (
-      <div key={index} className={"d-flex justify-content-center gap-1"}>
+      <div key={index} className={styles.single_ingredient_to_add}>
         <Form.Group className="mb1 u-75" controlId="ingredients">
-           {!index && <Form.Label>Ingredience</Form.Label>} 
-          <Form.Select value={ingredient.id} onChange={(e) => setIngredientField("id", e.target.value, index)}>
-              
+          {!index && <Form.Label>Ingredience</Form.Label>}
+          <Form.Select value={ingredient.id} onChange={(e) => setIngredientField("id", e.target.value, index)} required>
+            <option></option>
             {sortedIngredients.map((item) => {
               return (
-                 <option key={item.id} value={item.id}>
+                <option key={item.id} value={item.id}>
                   {item.name}
                 </option>
-              )
+              );
             })}
           </Form.Select>
         </Form.Group>
@@ -90,10 +94,22 @@ function CreateNewRecipeModal({ allIngredients, onComplete, recipe }) {
         </Form.Group>
 
         <Form.Group className="mb-1" controlId="unit">
-         {!index && <Form.Label>Jednotka</Form.Label>}
-          <Form.Control value={ingredient.unit} onChange={(e) => setIngredientField("unit", e.target.value, index)} placeholder="napr. kg, ml" required/>
+          {!index && <Form.Label>Jednotka</Form.Label>}
+          <Form.Control
+            value={ingredient.unit}
+            onChange={(e) => setIngredientField("unit", e.target.value, index)}
+            placeholder="napr. kg, ml, kus"
+            required
+          />
         </Form.Group>
-        <Button onClick={() => removeIngredient(index)}>X</Button>
+
+        {/* styles.remove_ing_btn */}
+        <button
+          onClick={() => removeIngredient(index)}
+          className={`${styles.remove_ing_btn} ${styles["remove_ing_btn_" + index]}`}
+        >
+          <Icon path={mdiDeleteForever} size={0.9} />
+        </button>
       </div>
     );
   };
@@ -107,7 +123,7 @@ function CreateNewRecipeModal({ allIngredients, onComplete, recipe }) {
   const addEmptyIngredient = () => {
     const newFormData = {
       ...formData,
-      ingredients: [...formData.ingredients, emptyIngredient()], 
+      ingredients: [...formData.ingredients, emptyIngredient()],
     };
     setFormData(newFormData);
   };
@@ -133,7 +149,6 @@ function CreateNewRecipeModal({ allIngredients, onComplete, recipe }) {
     }
 
     const newData = { ...formData };
-    console.log(newData);
     const payload = {
       ...newData,
       id: recipe ? recipe.id : null,
@@ -152,20 +167,70 @@ function CreateNewRecipeModal({ allIngredients, onComplete, recipe }) {
         body: JSON.stringify(payload),
       }
     );
-
     const data = await res.json();
     if (res.status >= 400) {
       setAddRecipeCall({ state: "error", error: data });
     } else {
+      // console.log(res.status)
       setAddRecipeCall({ state: "success", data });
-      if (typeof onComplete === "function") {
-        onComplete(data);
-      }
+      setRecipeEdited(!recipeEdited);
     }
-    handleCloseModal(data);
+    handleCloseModal();
+  };
+
+  const handleDeleteRecipe = async () => {
+    const res = await fetch(
+      // `https://cookbook-server-nu.vercel.app/recipe/${recipe ? "update" : "create"}`,
+      `http://localhost:3000/recipe/delete`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ id: recipe.id }),
+      }
+    );
+    if (res.status >= 400) {
+      console.log("ERROR");
+    } else {
+      setRecipeEdited(!recipeEdited);
+    }
   };
 
 
+
+  // Button for recipe delete and "are you sure?" popover
+  function DeleteRecipeBtn() {
+    const [showPopover, setShowPopover] = useState(false);
+    const [target, setTarget] = useState(null);
+    const ref = useRef(null);
+
+    const handleClick = (event) => {
+      setShowPopover(!showPopover);
+      setTarget(event.target);
+    };
+
+    return (
+      <div ref={ref}>
+        <Button onClick={handleClick} variant="danger">
+          <Icon path={mdiDeleteForever} size={0.8} />
+          Vymazat recept
+        </Button>
+
+        <Overlay show={showPopover} target={target} placement="top" container={ref} containerPadding={20}>
+          <Popover id="popover-contained">
+            <Popover.Header as="h3" className={styles.popover_header}>
+              Opravdu si přejete vymazat recept?<Button className={styles.close_popover_btn} onClick={() => handleClick()}><Icon path={mdiClose} size={1} /></Button>
+            </Popover.Header>
+            <Popover.Body className={styles.popover_body}>
+              <Button variant="danger" onClick={() => handleDeleteRecipe()}>Ano</Button>
+              <Button onClick={() => handleClick()}>Ne</Button>
+            </Popover.Body>
+          </Popover>
+        </Overlay>
+      </div>
+    );
+  }
 
   return (
     <>
@@ -197,14 +262,17 @@ function CreateNewRecipeModal({ allIngredients, onComplete, recipe }) {
                 onChange={(e) => setField("description", e.target.value)}
                 required
               />
-               <Form.Control.Feedback type="invalid">Zadejte postup</Form.Control.Feedback>
+              <Form.Control.Feedback type="invalid">Zadejte postup</Form.Control.Feedback>
             </Form.Group>
 
             {formData.ingredients.map((ing, index) => {
               return ingredientInputGroup(ing, index);
             })}
 
-            <Button onClick={addEmptyIngredient}>Přidat ingredienci</Button>
+            <Button onClick={addEmptyIngredient} className={styles.add_ingredient_btn}>
+              <Icon path={mdiCarrot} size={1} />
+              Přidat ingredienci
+            </Button>
 
             <Modal.Footer>
               <div className="d-flex flex-row justify-content-between align-items-center w-100">
@@ -214,21 +282,23 @@ function CreateNewRecipeModal({ allIngredients, onComplete, recipe }) {
               </div>
               <Button
                 style={{ float: "right", background: "green" }}
-                variant="secondary"
+                variant="success"
                 class="btn btn-success btn-sm"
+                // className={styles.add_update_recipe}
                 type="submit"
                 disabled={addRecipeCall.state === "pending"}
               >
-                {" "}
                 {addRecipeCall.state === "pending" ? (
                   <Icon path={mdiLoading} size={0.8} spin={true} />
                 ) : (
                   <>
-                    <Icon path={recipe ? mdiPencilOutline : mdiPlus} size={1} />
+                    <Icon path={recipe ? mdiPencilOutline : mdiPlus} size={0.8} />
                     {recipe ? "Upravit recept" : "Pridat recept"}
                   </>
                 )}
               </Button>
+
+              {recipe && <DeleteRecipeBtn />}
             </Modal.Footer>
           </Form>
         </Modal.Body>
@@ -236,7 +306,7 @@ function CreateNewRecipeModal({ allIngredients, onComplete, recipe }) {
 
       {recipe ? (
         isAuthorized && (
-          <Button style={{ cursor: "pointer", float: "right" }} onClick={() => handleShowModal()}>
+          <Button style={{ cursor: "pointer", float: "right", height: "2.5rem" }} onClick={() => handleShowModal()}>
             <Icon size={0.7} path={mdiPencilOutline} />
           </Button>
         )

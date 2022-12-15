@@ -1,24 +1,22 @@
 import React from "react";
 import Recipe from "./Recipe";
 import "../App.css";
+import { Container, Row, Col } from "react-bootstrap";
 
-function RecipeGridList({isLarge, filteredRecipeList, allIngredients}) {
 
+function RecipeGridList({ isLarge, filteredRecipeList, allIngredients }) {
   return (
-    <div className="row">
-      {filteredRecipeList.map((recipe) => {
-        return (
-          <div key={recipe.id} className="col-12 col-sm-6 col-md-4 col-lg-4 col-xl-3">
-            <Recipe
-              isLarge={isLarge}
-              recipe={recipe}
-              allIngredients={allIngredients}
-            />
-          </div>
-        );
-      })}
-      ;
-    </div>
+    <Container>
+      <Row>
+        {filteredRecipeList.map((recipe) => {
+          return (
+            <Col key={recipe.id} sm={6} md={4} lg={3} lx={3}>
+              <Recipe key={recipe.id} isLarge={isLarge} recipe={recipe} allIngredients={allIngredients} />
+            </Col>
+          );
+        })}
+      </Row>
+    </Container>
   );
 }
 

@@ -1,20 +1,11 @@
-import { createContext} from "react";
+import { createContext, useState } from "react";
 
 const UserContext = createContext();
 
 export function UserProvider({ children }) {
+  const [isAuthorized, setIsAuthorized] = useState(true);
 
-     const value = {
-         isAuthorized: true,
-        }
-        
-    return (
-        <UserContext.Provider
-            value={value}
-        >
-            {children}
-        </UserContext.Provider>
-    )
+  return <UserContext.Provider value={{ isAuthorized, setIsAuthorized }}>{children}</UserContext.Provider>;
 }
 
 export default UserContext;
