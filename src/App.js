@@ -22,7 +22,7 @@ function App() {
   let navigate = useNavigate();
 
   useEffect(() => {
-    fetch(`https://cookbook-server-gamma.vercel.app//recipe/list`, {
+    fetch(`https://cookbook-server-gamma.vercel.app/recipe/list`, {
       method: "GET",
     }).then(async (response) => {
       const responseJson = await response.json();
