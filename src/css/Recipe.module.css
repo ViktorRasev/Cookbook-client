@@ -9,6 +9,12 @@
   height: 38rem;
 }
 
+@media (max-width: 600px) { 
+  .card_body { 
+    height: fit-content;
+  }
+}
+
 .card_body_large {
   padding: 0 !important;
   height: fit-content;
