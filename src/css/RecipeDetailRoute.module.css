@@ -1,5 +1,25 @@
+.title {
+  margin: 1rem;
+  text-align: center;
+}
 
+.description {
+  text-align: center;
+}
 
-.ingredients h2{
-    margin-left: 1rem;
- }
+.ingredients h2 {
+  margin-left: 2rem;
+}
+.ingredients ul {
+  list-style: none;
+}
+
+.ingredients li {
+  border-bottom: 1px solid black;
+  width: fit-content;
+}
+.loading_icon {
+  text-align: center;
+  margin-top: 2rem;
+}
+

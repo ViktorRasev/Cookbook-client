@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { Card, Container } from "react-bootstrap";
+import Icon from "@mdi/react";
+import { mdiLoading } from "@mdi/js";
 import styles from "../css/RecipeDetailRoute.module.css";
 
 export default function RecipeDetailRoute() {
@@ -72,10 +74,10 @@ export default function RecipeDetailRoute() {
           <Card>
             <Card.Img variant="top" src={recipe.imgUri} />
             <Card.Body>
-              <Card.Title>
+              <Card.Title className={styles.title}>
                 <h1>{result.name}</h1>
               </Card.Title>
-              <Card.Text>{result.description}</Card.Text>
+              <Card.Text className={styles.description}>{result.description}</Card.Text>
               <Card.Text className={styles.ingredients}>
                 <h2>Ingredience</h2>
                 <ul>
@@ -90,14 +92,10 @@ export default function RecipeDetailRoute() {
       );
     } else if (isPending) {
       return (
-        <>
-          <div>Loading</div>
-          <div>Loading</div>
-          <div>Loading</div>
-          <div>Loading</div>
-          <div>Loading</div>
-          <div>Loading</div>
-        </>
+        <div className={styles.loading_icon}>
+          <Icon path={mdiLoading} spin={true}size={2}/>
+          <h3>Loading</h3>
+        </div>
       );
     } else if (isError) {
       return (

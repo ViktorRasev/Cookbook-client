@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Card from "react-bootstrap/Card";
 import CreateNewRecipeModal from "./CreateNewRecipeModal";
+import styles from "../css/Recipe.module.css"
 
 function matchIngredients(ingredientsInRecepies, ingredientsAll) {
   return ingredientsInRecepies.map((oneIngredient) => {
@@ -17,29 +18,30 @@ function Recipe({ isLarge,  recipe, allIngredients}) {
   );
   const [recipeData, setRecipeData] = useState(recipe);
   return (
-    <Card className="d-flex-justify-content-start">
-      <Card.Body >
-        <div className="single-meal">
+    // <Card className="d-flex-justify-content-start">
+    <Card className={styles.card}>
+      <Card.Body className={isLarge ? styles.card_body : styles.card_body_large}>
+        <div className={styles.single_meal}>
          {recipe.imgUri && <img
-            className="food-image"
+            className={styles.food_image}
             src={recipe.imgUri}
             alt="recipe result"
          />}
-          <h1 className={isLarge ? "title" : "title-small"} >
+          <h1 className={isLarge ? styles.title : styles.title_small} >
             {recipe.name}{" "}
             <CreateNewRecipeModal
               allIngredients={allIngredients}
               recipe={recipeData}
             />
           </h1>
-          <Card.Text>
+          <Card.Text className={styles.card_text}>
             {isLarge ? (
               <p className="text-truncate">{recipe.description}</p>
             ) : ( 
               <p>{recipe.description}</p>
             )}
           </Card.Text>
-          <ul>
+          <ul className={styles.ingredient_list}>
             {ingredientsMatched.map((singleIngredient) => {
               return <li key={singleIngredient}>{singleIngredient}</li>;
             })}
