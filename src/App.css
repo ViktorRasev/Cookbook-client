@@ -10,14 +10,17 @@ html {
   margin: 50px;
 }
 
-.card {
-  /* min-height: 300px; */
+/* .card {
+  min-height: 300px;
   margin: 1rem 0 ;
   position: absolute;
-  top: 50px;
+  top: 3rem;
+  
+ 
 }
 .card-body { 
   padding: 0!important;
+  height: 40rem;
 
 }
 .card-text { 
@@ -40,23 +43,24 @@ html {
   font-size: 1rem;
   display: flex;
   justify-content: space-between;
-}
+} */
 
-.title-small {
+/* .title-small {
   font-size: 1.2rem;
   padding: 0.5rem;
   display: flex;
   justify-content: space-between;
-}
-.description {
+} */
+/* .description {
   padding: 1rem;
   max-width: 1200px;
   font-size: large;
-}
+} */
 
 .navbar {
   position: absolute;
   top: 50px;
+  margin-bottom: 4rem;
 }
 
 @media (max-width: 750px) {

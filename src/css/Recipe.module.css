@@ -1,0 +1,54 @@
+.card {
+  display: flex;
+  justify-content: start;
+  margin-top: 2rem;
+}
+
+.card_body {
+  padding: 0 !important;
+  height: 38rem;
+}
+
+.card_body_large {
+  padding: 0 !important;
+  height: fit-content;
+}
+
+.card_text {
+  padding: 0.8rem;
+}
+
+.single_meal {
+  display: flex;
+  flex-direction: column;
+}
+
+.food_image {
+  margin: 0;
+  padding: 0;
+  border-radius: 5px 5px 0 0;
+}
+
+.title {
+  padding: 1rem;
+  font-size: 1rem;
+  display: flex;
+  justify-content: space-between;
+}
+.title_small {
+  font-size: 1.2rem;
+  padding: 0.5rem;
+  display: flex;
+  justify-content: space-between;
+}
+
+.ingredient_list {
+  list-style: none;
+  padding: 0;
+}
+.ingredient_list li {
+  padding-left: 1rem;
+}
+.ingredient_list li:nth-child(odd) {
+  background-color: #e6e6e66f;
+}
