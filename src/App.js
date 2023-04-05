@@ -18,7 +18,6 @@ import { NavLink } from "react-bootstrap";
 
 function App() {
   const {isAuthorized, setIsAuthorized}  = useContext(UserContext);
-
   const [recipeList, setRecipeList] = useState([])
   const [fetchDataState, setFetchDataState] = useState("loading")
 
