@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
 import "./App.css";
+import { db } from "./utils/firebase"
+import { collection, addDoc, getDocs } from "firebase/firestore"
 import "bootstrap/dist/css/bootstrap.min.css";
 import Icon from "@mdi/react";
 import { mdiLoading, mdiAlertOctagonOutline } from "@mdi/js";
@@ -14,12 +16,68 @@ import { Outlet, useNavigate } from "react-router-dom";
 import { NavLink } from "react-bootstrap";
 
 function App() {
-  const  {isAuthorized, setIsAuthorized}  = useContext(UserContext);
+  const {isAuthorized, setIsAuthorized}  = useContext(UserContext);
   const [cookbookLoadCall, setCookbookLoadCall] = useState({
     state: "pending",
   });
 
   let navigate = useNavigate();
+
+  // FIREBASE TEST
+  const [name, setName] = useState('')
+  const [age, setAge] = useState('')
+  const [newNames, setNewNames] = useState([])
+  const saveName = (e) => {
+    e.preventDefault()
+    setName(e.target.value)
+  }
+  const saveAge = (e) => {
+    e.preventDefault()
+    setAge(e.target.value)
+
+    console.log(age)
+  }
+
+  const handleFirebaseSubmit = () => {
+    addFirebaseData()
+
+    setAge("")
+    setName("")
+
+  }
+
+  // GET REQUEST
+  const fetchPost = async () => {
+
+    await getDocs(collection(db, "names"))
+        .then((querySnapshot)=>{
+          const newData = querySnapshot.docs
+              .map((doc) => ({...doc.data(), id:doc.id }));
+          setNewNames(newData);
+          console.log(newNames, "newName");
+          console.log(newData, "newData");
+        })
+
+  }
+
+  useEffect(() => {
+    fetchPost()
+  }, [])
+
+  // POST REQUEST
+  const addFirebaseData = async () => {
+    try{
+    const namesRef = await addDoc(collection(db, 'names'), {
+      names: name,
+    })
+    const agesRef = await addDoc(collection(db, "ages"), {
+      ages: age,
+    })
+    console.log("Document written with ID", namesRef.id, agesRef.id)
+    } catch(e) {
+      console.error("Error adding document", e)
+    }
+  }
 
   useEffect(() => {
     fetch(`https://cookbook-server-gamma.vercel.app/recipe/list`, {
@@ -80,6 +138,7 @@ function App() {
 
   return (
     <div className="App">
+
       <Navbar
         fixed="top"
         expand={"sm"}
@@ -108,6 +167,19 @@ function App() {
         </Container>
       </Navbar>
       <Outlet />
+      <div>
+        <h1>Hello WOrld</h1>
+        <input type="text" value={name} onChange={(e) => saveName(e)}/>
+        <input type="number" value={age} onChange={(e) => saveAge(e)}/>
+        <button onClick={handleFirebaseSubmit}>SendData to Firebase</button>
+        <div>
+          <ol>
+          {newNames.map((singleName) => {
+            return <li>{singleName.names}</li>
+          })}
+          </ol>
+        </div>
+      </div>
     </div>
   );
 }
