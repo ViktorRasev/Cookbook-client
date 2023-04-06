@@ -14,12 +14,14 @@ import Offcanvas from "react-bootstrap/Offcanvas";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Outlet, useNavigate } from "react-router-dom";
 import { NavLink } from "react-bootstrap";
+import RecipeEditedContext from "./RecipeEditedContext";
 
 
 function App() {
   const {isAuthorized, setIsAuthorized}  = useContext(UserContext);
   const [recipeList, setRecipeList] = useState([])
   const [fetchDataState, setFetchDataState] = useState("loading")
+  const { recipeEdited } = useContext(RecipeEditedContext);
 
   let navigate = useNavigate();
 
@@ -39,7 +41,7 @@ function App() {
       }
     }
     getRecipesData()
-  }, [])
+  }, [recipeEdited])
 
   function getRecipesListDropdown() {
     if (fetchDataState === "loading") {

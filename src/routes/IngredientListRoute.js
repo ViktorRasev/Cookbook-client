@@ -2,8 +2,6 @@ import { useState, useEffect } from "react";
 import { db } from "../utils/firebase"
 import {collection, getDocs, getDoc, doc} from "firebase/firestore";
 import styles from "../css/Ingredients.module.css";
-import {useSearchParams} from "react-router-dom";
-import button from "bootstrap/js/src/button";
 
 function IngredientsList() {
   const [ingredientList, setIngredientList] = useState([]);
