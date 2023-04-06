@@ -17,6 +17,7 @@
     grid-auto-rows: 50px;
     grid-template-columns: repeat(3, 1fr);
     justify-items: center;
+    justify-content: center;
 }
 
 .ingredient {
