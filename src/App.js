@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
 import "./App.css";
+import { db } from "./utils/firebase"
+import { collection, getDocs} from "firebase/firestore"
 import "bootstrap/dist/css/bootstrap.min.css";
 import Icon from "@mdi/react";
 import { mdiLoading, mdiAlertOctagonOutline } from "@mdi/js";
@@ -13,61 +15,62 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { Outlet, useNavigate } from "react-router-dom";
 import { NavLink } from "react-bootstrap";
 
+
 function App() {
-  const  {isAuthorized, setIsAuthorized}  = useContext(UserContext);
-  const [cookbookLoadCall, setCookbookLoadCall] = useState({
-    state: "pending",
-  });
+  const {isAuthorized, setIsAuthorized}  = useContext(UserContext);
+  const [recipeList, setRecipeList] = useState([])
+  const [fetchDataState, setFetchDataState] = useState("loading")
 
   let navigate = useNavigate();
 
   useEffect(() => {
-    fetch(`https://cookbook-server-gamma.vercel.app/recipe/list`, {
-      method: "GET",
-    }).then(async (response) => {
-      const responseJson = await response.json();
-      if (response.status >= 400) {
-        setCookbookLoadCall({ state: "error", error: responseJson });
-      } else {
-        setCookbookLoadCall({ state: "success", data: responseJson });
+    const getRecipesData = async () => {
+      try {
+      const querySnapshot = await getDocs(collection(db, "recipes"))
+      const docs = []
+      querySnapshot.forEach((recipe) => {
+        docs.push({...recipe.data()})
+      })
+        setRecipeList(docs)
+        setFetchDataState("success")
+      } catch(error) {
+        console.error(error)
+        setFetchDataState("error")
       }
-    });
-  }, []);
+    }
+    getRecipesData()
+  }, [])
 
   function getRecipesListDropdown() {
-    const isPending = cookbookLoadCall.state === "pending";
-    const isLoaded = cookbookLoadCall.state === "success";
-    const isError = cookbookLoadCall.state === "error";
-
-    if (isPending) {
+    if (fetchDataState === "loading") {
       return (
         <Nav.Link disabled={true}>
           <Icon size={2} path={mdiLoading} spin={true} /> Recipes List
         </Nav.Link>
       );
-    } else if (isLoaded) {
+    } else if (fetchDataState === "success") {
       return (
         <>
           <NavLink onClick={() => setIsAuthorized(!isAuthorized)}>
             {isAuthorized ? "Přihlášen" : "Nepřihlášen"}
           </NavLink>
           <NavDropdown title="Vyberte recept" id="navbarScrollingDropdown">
-            {cookbookLoadCall.data.map((singleRecipe) => {
+            {recipeList.map((recipe) => {
               return (
                 <NavDropdown.Item
-                  key={singleRecipe.id}
+                  key={recipe.id}
                   onClick={() =>
-                    navigate("/recipeDetail?id=" + singleRecipe.id)
+                    navigate("/recipeDetail?id=" + recipe.id)
                   }
                 >
-                  {singleRecipe.name}
+                  {recipe.name}
                 </NavDropdown.Item>
               );
             })}
           </NavDropdown>
         </>
       );
-    } else if (isError) {
+    } else if (fetchDataState === "error") {
       return (
         <div>
           <Icon size={1} path={mdiAlertOctagonOutline} /> Error

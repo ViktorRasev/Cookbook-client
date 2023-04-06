@@ -13,7 +13,6 @@ import { RecipeEditedProvidert } from "./RecipeEditedContext";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
-  <React.StrictMode>
     <UserProvider>
       <RecipeEditedProvidert>
         <BrowserRouter>
@@ -27,7 +26,6 @@ root.render(
         </BrowserRouter>
       </RecipeEditedProvidert>
     </UserProvider>
-  </React.StrictMode>
 );
 
 // If you want to start measuring performance in your app, pass a function
