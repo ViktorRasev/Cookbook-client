@@ -1,33 +1,35 @@
 import { useState, useEffect } from "react";
-
-
+import { db } from "../utils/firebase"
+import {collection, getDocs, getDoc, doc} from "firebase/firestore";
 import styles from "../css/Ingredients.module.css";
+import {useSearchParams} from "react-router-dom";
+import button from "bootstrap/js/src/button";
 
 function IngredientsList() {
-  const [ingredientsLoadCall, setIngredientsLoadCall] = useState({
-    state: "pending",
-  });
+  const [ingredientList, setIngredientList] = useState([]);
+  const [fetchIngState, setFetchIngState] = useState("loading")
 
   useEffect(() => {
-    fetch(
-      // `https://cookbook-server-nu.vercel.app/ingredient/list`,
-      `https://cookbook-server-gamma.vercel.app/ingredient/list`,
-      {
-        method: "GET",
+    const getIngredientsData = async () => {
+      try {
+        const querySnapshot = await getDocs(collection(db, "ingredients"))
+        const docs = []
+        querySnapshot.forEach((ingredient) => {
+          docs.push({...ingredient.data()})
+        })
+        setIngredientList(docs)
+        setFetchIngState("success")
+      } catch(error) {
+        setFetchIngState("error")
       }
-    ).then(async (response) => {
-      const responseJson = await response.json();
-      if (response.status >= 400) {
-        setIngredientsLoadCall({ state: "error", error: responseJson });
-      } else {
-        setIngredientsLoadCall({ state: "success", data: responseJson });
-      }
-    });
-  }, []);
+    }
+    getIngredientsData()
+  }, [])
+
 
   const displayIngredients = () => {
-    if (ingredientsLoadCall.state === "success") {
-      return ingredientsLoadCall.data.map((item) => {
+    if (fetchIngState === "success") {
+      return ingredientList.map((item) => {
         return <div className={styles.ingredient} key={item.id}>{item.name}</div>;
       });
     }

@@ -32,7 +32,7 @@ function App() {
         docs.push({...recipe.data()})
       })
         setRecipeList(docs)
-        setFetchDataState("ready")
+        setFetchDataState("success")
       } catch(error) {
         console.error(error)
         setFetchDataState("error")
@@ -48,7 +48,7 @@ function App() {
           <Icon size={2} path={mdiLoading} spin={true} /> Recipes List
         </Nav.Link>
       );
-    } else if (fetchDataState === "ready") {
+    } else if (fetchDataState === "success") {
       return (
         <>
           <NavLink onClick={() => setIsAuthorized(!isAuthorized)}>
