@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import { db } from "../utils/firebase"
-import {collection, getDocs, getDoc, doc} from "firebase/firestore";
+import {collection, getDocs } from "firebase/firestore";
 import styles from "../css/Ingredients.module.css";
+
 
 function IngredientsList() {
   const [ingredientList, setIngredientList] = useState([]);
@@ -25,10 +26,14 @@ function IngredientsList() {
   }, [])
 
 
+
+  const handleGoogleSearch = (value) => {
+    window.open(`https://www.google.com/search?q=${value}`, "_blank")
+  }
   const displayIngredients = () => {
     if (fetchIngState === "success") {
       return ingredientList.map((item) => {
-        return <div className={styles.ingredient} key={item.id}>{item.name}</div>;
+        return <button className={styles.ingredient} value={item.name} onClick={() => handleGoogleSearch(item.name)} key={item.id}>{item.name}</button>;
       });
     }
   };
