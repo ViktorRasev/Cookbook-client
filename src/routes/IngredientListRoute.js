@@ -8,8 +8,10 @@ import DeleteIngredientModal from "../bricks/DeleteIngredientModal";
 import Icon from "@mdi/react";
 import { mdiDeleteForever } from "@mdi/js";
 import 'react-toastify/dist/ReactToastify.css';
+import UserContext from "../UserProvider";
 
 function IngredientsList() {
+  const { isAuthorized } = useContext(UserContext);
   const {ingredientsEdited} = useContext(IngredientsEditedContext)
   const [ingredientList, setIngredientList] = useState([]);
   const [recipeList, setRecipeList] = useState([])
@@ -77,8 +79,13 @@ function IngredientsList() {
       return sortedIngredients.map((item) => {
         return (
             <div className={styles.ingredient_btn_group} key={item.id}>
-              <button className={styles.ingredient_btn} onClick={() => handleGoogleSearch(item.name)} >{item.name}</button>
-              <button className={styles.ingredient_remove_btn}  onClick={() => getRemoveBtnValue(item.id)}><Icon path={mdiDeleteForever} size={0.8}/></button>
+              <button className={styles.ingredient_btn} onClick={() => handleGoogleSearch(item.name)}>{item.name}</button>
+              <button
+                  disabled={!isAuthorized}
+                  className={isAuthorized ? styles.ingredient_remove_btn : styles.ingredient_remove_btn_disabled}
+                  onClick={() => getRemoveBtnValue(item.id)}
+              >
+                <Icon path={ mdiDeleteForever } size={0.8}/></button>
             </div>
             )
       });

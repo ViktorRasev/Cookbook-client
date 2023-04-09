@@ -3,7 +3,7 @@ import { useContext, useEffect, useState } from "react";
 import IngredientsEditedContext from "../IngredientsEditedContext";
 import { db } from "../utils/firebase"
 import { deleteDoc, doc } from "firebase/firestore";
-import {  toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 
 const DeleteIngredientModal = ({recipesUsingIngredient, ingredientToRemoveId, showDeleteIngredientModal}) => {
     const {setIngredientsEdited} = useContext(IngredientsEditedContext)
@@ -52,7 +52,6 @@ const DeleteIngredientModal = ({recipesUsingIngredient, ingredientToRemoveId, sh
                         </div>}
                 </Modal.Body>
             </Modal>
-        {/*<ToastContainer/>*/}
         </>
     )
 }
