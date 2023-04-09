@@ -23,13 +23,11 @@
   justify-content: center;
   gap: 3px;
 }
+
 .add_ingredient_btn {
   margin: 1rem 0;
   display: flex;
-
-
 }
-
 
 .add_update_recipe {
   display: flex;
@@ -41,14 +39,12 @@
   border-radius: 6px;
 }
 
-
-
-
 .popover_header { 
     background-color: #dc3545;
     color: white;
     position: relative;
 }
+
 .close_popover_btn { 
     background-color: transparent;
     border: none;

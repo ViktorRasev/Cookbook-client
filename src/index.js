@@ -9,22 +9,25 @@ import RecipeDetailRoute from "./routes/RecipeDetailRoute";
 import RecipeListRoute from "./routes/RecipeListRoute";
 import IngredientListRoute from "./routes/IngredientListRoute";
 import { UserProvider } from "./UserProvider";
-import { RecipeEditedProvidert } from "./RecipeEditedContext";
+import { RecipeEditedProvider } from "./RecipeEditedContext";
+import { IngredientsEditedProvider} from "./IngredientsEditedContext"
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
     <UserProvider>
-      <RecipeEditedProvidert>
-        <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<App />}>
-              <Route path="" element={<RecipeListRoute />} />
-              <Route path="recipeDetail" element={<RecipeDetailRoute />} />
-              <Route path="IngredientList" element={<IngredientListRoute />} />
-            </Route>
-          </Routes>
-        </BrowserRouter>
-      </RecipeEditedProvidert>
+      <RecipeEditedProvider>
+          <IngredientsEditedProvider>
+            <BrowserRouter>
+              <Routes>
+                <Route path="/" element={<App />}>
+                  <Route path="" element={<RecipeListRoute />} />
+                  <Route path="recipeDetail" element={<RecipeDetailRoute />} />
+                  <Route path="IngredientList" element={<IngredientListRoute />} />
+                </Route>
+              </Routes>
+            </BrowserRouter>
+          </IngredientsEditedProvider>
+      </RecipeEditedProvider>
     </UserProvider>
 );
 

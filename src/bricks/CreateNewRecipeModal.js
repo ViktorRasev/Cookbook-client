@@ -1,5 +1,5 @@
-import Icon from "@mdi/react";
 import "../App.css";
+import Icon from "@mdi/react";
 import { mdiPlus, mdiLoading, mdiPencilOutline, mdiDeleteForever, mdiCarrot, mdiClose } from "@mdi/js";
 import { useState, useEffect, useContext, useRef } from "react";
 import { Button, Modal, Form, Popover, Overlay } from "react-bootstrap";
@@ -9,13 +9,19 @@ import styles from "../css/CreateNewRecipeModal.module.css";
 import { db } from "../utils/firebase"
 import { doc, setDoc, deleteDoc } from "firebase/firestore"
 import { nanoid } from 'nanoid'
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function CreateNewRecipeModal({ allIngredients, recipe }) {
   const { isAuthorized } = useContext(UserContext);
-  const { recipeEdited, setRecipeEdited } = useContext(RecipeEditedContext);
+  const {  setRecipeEdited } = useContext(RecipeEditedContext);
   const [isModalShown, setIsModalShown] = useState(false);
   const [validated, setValidated] = useState(false);
   const [addUpdateRecipeState, setAddUpdateRecipeState] = useState("")
+
+  const recipeAddedMessage = () => toast.success("Recept úspěšně přidán")
+  const recipeEditedMessage = () => toast.success("Recept úspěšně upraven")
+  const recipeDeletedMessage = () => toast.info("Recept úspěšně smazán")
 
   // state for saving from data
   const [formData, setFormData] = useState({
@@ -57,12 +63,8 @@ function CreateNewRecipeModal({ allIngredients, recipe }) {
 
   // sort ingredients in alphabetical order
   const sortedIngredients = allIngredients.sort((a, b) => {
-    if (a.name < b.name) {
-      return -1;
-    }
-    if (a.name < b.name) {
-      return 1;
-    }
+    if (a.name < b.name) return -1
+    if (a.name < b.name) return 1
     return 0;
   });
 
@@ -123,6 +125,7 @@ function CreateNewRecipeModal({ allIngredients, recipe }) {
     addOrUpdateRecipe(payload)
     setRecipeEdited(prevValue => !prevValue);
     handleCloseModal();
+    recipe ? recipeEditedMessage() : recipeAddedMessage()
   };
 
   const handleDeleteRecipe = async () => {
@@ -132,6 +135,7 @@ function CreateNewRecipeModal({ allIngredients, recipe }) {
       console.error(error)
     }
     setRecipeEdited(prevValue => !prevValue)
+    recipeDeletedMessage()
     handleCloseModal()
   };
 
@@ -148,12 +152,12 @@ function CreateNewRecipeModal({ allIngredients, recipe }) {
 
     return (
       <div ref={ref}>
-        <Button onClick={handleClick} variant="danger">
+        <Button onClick={(event) => handleClick(event)} variant="danger">
           <Icon path={mdiDeleteForever} size={0.8} />
           Vymazat recept
         </Button>
 
-        <Overlay show={showPopover} target={target} placement="top" container={ref} containerPadding={20}>
+        <Overlay show={showPopover} target={target} placement="top" container={target} containerPadding={20}>
           <Popover id="popover-contained">
             <Popover.Header as="h3" className={styles.popover_header}>
               Opravdu si přejete vymazat recept?<Button className={styles.close_popover_btn} onClick={() => handleClick()}><Icon path={mdiClose} size={1} /></Button>
@@ -277,7 +281,7 @@ function CreateNewRecipeModal({ allIngredients, recipe }) {
                 ) : (
                   <>
                     <Icon path={recipe ? mdiPencilOutline : mdiPlus} size={0.8} />
-                    {recipe ? "Upravit recept" : "Pridat recept"}
+                    {recipe ? "Upravit recept" : "Přidat recept"}
                   </>
                 )}
               </Button>
@@ -308,7 +312,7 @@ function CreateNewRecipeModal({ allIngredients, recipe }) {
           }}
         >
           <Icon path={mdiPlus} style={{ cursor: "pointer" }} size={1} />
-          Pridat recept
+          Přidat recept
         </Button>
       )}
     </>

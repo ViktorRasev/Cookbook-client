@@ -1,11 +1,8 @@
-/* ={{display: "grid",  gridTemplateColumns: "repeat(3, 1fr)"}} */
-
-.title { 
+.title {
     margin-top: 5rem;
     text-align: center;
-
-   
 }
+
 .wrapper { 
     max-width: 80vw;
     padding: 2rem;
@@ -20,33 +17,54 @@
     justify-content: center;
 }
 
-.ingredient {
+.ingredient_btn_group {
     min-width: 250px;
     width: fit-content;
     height: 50px;
+    color: #000;
+    background-color: transparent;
+    border: none;
+    border-radius: 7px;
+    cursor: pointer;
+    outline: none;
+    display: flex;
+    flex-direction: row;
+}
+
+.ingredient_btn {
+    width: 85%;
+    border: none;
+    border-radius: 7px 0 0 7px ;
     font-family: 'Roboto', sans-serif;
     font-size: 11px;
     text-transform: uppercase;
-    letter-spacing: 2.5px;
+    letter-spacing: 2px;
     font-weight: 500;
-    color: #000;
-    background-color: #fff;
-    border: none;
-    border-radius: 7px;
     box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
     transition: all 0.3s ease 0s;
-    cursor: pointer;
-    outline: none;
 }
 
-.ingredient:hover {
+.ingredient_remove_btn {
+    border: none;
+    width: 15%;
+    border-left: 1px solid #d2d2d2;
+    border-radius: 0 7px 7px 0;
+    box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease 0s;
+}
+.ingredient_btn:hover {
     background-color:#1266f1 ;
-    box-shadow: 0px 15px 20px #1266f1;
     color: #fff;
     transform: translateY(-7px);;
     box-shadow: 0px 15px 20px #72a4f7;
+}
+
+.ingredient_remove_btn:hover {
+    background-color: #ea062f;
     color: #fff;
-    transform: translateY(-7px);
+    transform: translateY(-7px);;
+    box-shadow: 0px 15px 20px #e34f69;
+    border: none;
 }
 
 @media(max-width: 960px) {

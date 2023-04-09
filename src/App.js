@@ -15,7 +15,8 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { Outlet, useNavigate } from "react-router-dom";
 import { NavLink } from "react-bootstrap";
 import RecipeEditedContext from "./RecipeEditedContext";
-
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
   const {isAuthorized, setIsAuthorized}  = useContext(UserContext);
@@ -113,6 +114,7 @@ function App() {
         </Container>
       </Navbar>
       <Outlet />
+      <ToastContainer autoClose={2000}/>
     </div>
   );
 }

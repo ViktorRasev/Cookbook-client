@@ -8,13 +8,11 @@ import Icon from "@mdi/react";
 import { mdiTable, mdiViewGridOutline, mdiMagnify } from "@mdi/js";
 import styles from "../css/RecipeList.module.css";
 
-function Header({ recipeList, allIngredients, onComplete, onRecipeEdited}) {
+function Header({ recipeList, allIngredients, onComplete}) {
   const [viewType, setViewType] = useState("grid");
   const isGrid = viewType === "grid";
-
   const [viewSize, setViewSize] = useState("large");
   const isLarge = viewSize === "large";
-
   const [searchBy, setSearchBy] = useState("");
 
   const filteredRecipeList = useMemo(() => {
@@ -35,15 +33,12 @@ function Header({ recipeList, allIngredients, onComplete, onRecipeEdited}) {
     if (!event.target.value) setSearchBy("");
   }
 
-
-
   return (
     <div>
       <Navbar bg="light">
         <Container fluid className={styles.header_container}>
           <div className={styles.header_buttons}>
             <Form className={styles.search_form} onSubmit={handleSearch}>
-            
               <Form.Control
                 id={"searchInput"}
                 type="search"
@@ -81,11 +76,9 @@ function Header({ recipeList, allIngredients, onComplete, onRecipeEdited}) {
               </Button>
             ) : null}
           </div>
-
           <CreateNewRecipeModal allIngredients={allIngredients} onComplete={onComplete}  />
         </Container>
       </Navbar>
-
       {isGrid ? (
         <RecipeGridList isLarge={isLarge} filteredRecipeList={filteredRecipeList} allIngredients={allIngredients} />
       ) : (
