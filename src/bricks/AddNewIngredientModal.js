@@ -1,14 +1,16 @@
 import styles from "../css/AddNewIngredientModal.module.css";
 import Icon from "@mdi/react";
-import {mdiPlus} from "@mdi/js";
+import { mdiPlus } from "@mdi/js";
 import { Modal, Form, Button } from "react-bootstrap";
 import { useState, useContext } from "react"
 import IngredientsEditedContext from "../IngredientsEditedContext";
 import { nanoid } from 'nanoid'
 import { db } from "../utils/firebase"
 import { doc, setDoc } from "firebase/firestore"
+import UserContext from "../UserProvider";
 
 const AddNewIngredientModal = () => {
+    const { isAuthorized } = useContext(UserContext);
     const { setIngredientsEdited } = useContext(IngredientsEditedContext)
     const [showModal, setShowModal] = useState(false)
     const [ingredientToAdd, setIngredientToAdd] = useState({
@@ -22,7 +24,7 @@ const AddNewIngredientModal = () => {
     const setNewIngredient = (e) => {
             setIngredientToAdd((prevValue) => {
                 const newData = {...prevValue}
-                newData.name = e
+                newData.name = e.toLowerCase()
                 newData.id = nanoid(16)
                 return newData
             })
@@ -51,7 +53,11 @@ const AddNewIngredientModal = () => {
 
     return(
         <>
-        <button className={styles.add_ingredient_btn} onClick={handleShowModal}>
+        <button
+            className={isAuthorized ? styles.add_ingredient_btn : styles.add_ingredient_btn_disabled}
+            onClick={handleShowModal}
+            disabled={!isAuthorized}
+        >
             <Icon path={mdiPlus} size={0.8} />
             Přidat ingredienci
         </button>
