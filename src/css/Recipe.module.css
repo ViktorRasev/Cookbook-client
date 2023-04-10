@@ -53,7 +53,7 @@
   cursor: pointer;
 }
 
-.title:hover, title,small:hover {
+.title:hover, .title_small:hover {
   text-decoration: underline;
 }
 
