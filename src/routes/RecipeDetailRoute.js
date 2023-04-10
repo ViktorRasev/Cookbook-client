@@ -71,7 +71,7 @@ export default function RecipeDetailRoute() {
 if(isLoaded){
       return (
         <Container>
-          <Card>
+          <Card className={styles.card}>
             <Card.Img variant="top" src={recipe.imgUri} />
             <Card.Body>
               <Card.Title className={styles.title}>
