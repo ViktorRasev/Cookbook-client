@@ -36,16 +36,19 @@ function Recipe({ isLarge,  recipe, allIngredients}) {
             src={recipe.imgUri}
             alt="recipe result"
          />}
-          <h1
-              className={isLarge ? styles.title : styles.title_small}
-              onClick={() => navigateToRecipe(recipe.id)}
-          >
-            {recipe.name}{" "}
+          <div className={styles.recipe_header}>
+            <h1
+                className={isLarge ? styles.title : styles.title_small}
+                onClick={() => navigateToRecipe(recipe.id)}
+            >
+              {recipe.name}{" "}
+
+            </h1>
             <CreateNewRecipeModal
-              allIngredients={allIngredients}
-              recipe={recipeData}
+                allIngredients={allIngredients}
+                recipe={recipeData}
             />
-          </h1>
+          </div>
           <Card.Text className={ isLarge ? "text-truncate": null} style={{padding:".8rem"}}>
             {recipe.description}
           </Card.Text>

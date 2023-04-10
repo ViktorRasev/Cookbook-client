@@ -31,36 +31,41 @@
   border-radius: 5px 5px 0 0;
   cursor: pointer;
 }
+
 .food_image:hover {
   opacity: .8;
 }
 
-.title {
-  padding: 1rem;
-  font-size: 1rem;
+.recipe_header {
   display: flex;
   justify-content: space-between;
+  align-items: baseline;
+  padding: 1rem;
+}
+
+.title {
+  font-size: 1rem;
   cursor: pointer;
 }
+
 .title_small {
   font-size: 1.2rem;
-  padding: 0.5rem;
-  display: flex;
-  justify-content: space-between;
   cursor: pointer;
 }
 
 .title:hover, title,small:hover {
-  color: #707070;
+  text-decoration: underline;
 }
 
 .ingredient_list {
   list-style: none;
   padding: 0;
 }
+
 .ingredient_list li {
   padding-left: 1rem;
 }
+
 .ingredient_list li:nth-child(odd) {
   background-color: #e6e6e66f;
 }
