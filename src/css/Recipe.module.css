@@ -20,10 +20,6 @@
   height: fit-content;
 }
 
-.card_text {
-  padding: 0.8rem;
-}
-
 .single_meal {
   display: flex;
   flex-direction: column;

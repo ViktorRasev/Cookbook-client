@@ -78,14 +78,12 @@ if(isLoaded){
                 <h1>{recipe.name}</h1>
               </Card.Title>
               <Card.Text className={styles.description}>{recipe.description}</Card.Text>
-              <Card.Text className={styles.ingredients}>
-                <h2>Ingredience</h2>
+                <h3 className={styles.ingredients}>Ingredience</h3>
                 <ul>
                   {matchedRecipeIngredients().ingredients.map((ingredient, index) => {
                     return <li key={index}>{`${ingredient.amount} ${ingredient.unit} - ${ingredient.name}`}</li>;
                   })}
                 </ul>
-              </Card.Text>
             </Card.Body>
           </Card>
         </Container>
@@ -95,7 +93,7 @@ if(isLoaded){
     {
       return (
         <div className={styles.loading_icon}>
-          <Icon path={mdiLoading} spin={true}size={2}/>
+          <Icon path={mdiLoading} spin={true} size={2}/>
           <h3>Loading</h3>
         </div>
       );

@@ -34,12 +34,8 @@ function Recipe({ isLarge,  recipe, allIngredients}) {
               recipe={recipeData}
             />
           </h1>
-          <Card.Text className={styles.card_text}>
-            {isLarge ? (
-              <p className="text-truncate">{recipe.description}</p>
-            ) : ( 
-              <p>{recipe.description}</p>
-            )}
+          <Card.Text className={ isLarge ? "text-truncate": null} style={{padding:".8rem"}}>
+            {recipe.description}
           </Card.Text>
           <ul className={styles.ingredient_list}>
             {ingredientsMatched.map((singleIngredient) => {
