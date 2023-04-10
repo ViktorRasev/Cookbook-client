@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Card from "react-bootstrap/Card";
 import CreateNewRecipeModal from "./CreateNewRecipeModal";
 import styles from "../css/Recipe.module.css"
+import {useNavigate} from "react-router-dom";
 
 function matchIngredients(ingredientsInRecepies, ingredientsAll) {
   return ingredientsInRecepies.map((oneIngredient) => {
@@ -17,17 +18,28 @@ function Recipe({ isLarge,  recipe, allIngredients}) {
     allIngredients
   );
   const [recipeData, setRecipeData] = useState(recipe);
+
+  let navigate = useNavigate();
+
+  const navigateToRecipe = (recipeId) => {
+    navigate("/recipeDetail?id=" + recipeId)
+  }
+
+
   return (
-    // <Card className="d-flex-justify-content-start">
     <Card className={styles.card}>
       <Card.Body className={isLarge ? styles.card_body : styles.card_body_large}>
         <div className={styles.single_meal}>
          {recipe.imgUri && <img
             className={styles.food_image}
+            onClick={() => navigateToRecipe(recipe.id)}
             src={recipe.imgUri}
             alt="recipe result"
          />}
-          <h1 className={isLarge ? styles.title : styles.title_small} >
+          <h1
+              className={isLarge ? styles.title : styles.title_small}
+              onClick={() => navigateToRecipe(recipe.id)}
+          >
             {recipe.name}{" "}
             <CreateNewRecipeModal
               allIngredients={allIngredients}
