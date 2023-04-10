@@ -1,0 +1,12 @@
+
+@media(max-width:575px) {
+
+
+.dropdown_item {
+    white-space: normal;
+    border-bottom: 1px solid #e8e8e8;
+}
+.dropdown_item:last-child {
+    border-bottom: none;
+}
+}
