@@ -1,4 +1,4 @@
-.add_ingredient_btn {
+.add_ingredient_btn, .submit_ingredient_btn {
     background-color:#28a745;
     min-width: 250px;
     width: fit-content;
@@ -21,7 +21,12 @@
     gap: .5rem;
 }
 
-.add_ingredient_btn:hover {
+.submit_ingredient_btn {
+    min-width: fit-content;
+    width: 130px;
+    height: 40px;
+}
+.add_ingredient_btn:hover, .submit_ingredient_btn:hover {
     background-color:#28a745 ;
     color: #fff;
     transform: translateY(-7px);;
@@ -54,14 +59,10 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    padding-bottom: 2rem;
 }
 
 .form_group {
     margin: 2rem 0;
     width: 70%;
-}
-
-.submit_ingredient_btn {
-    margin-bottom: 2rem;
-    width: 150px;
 }

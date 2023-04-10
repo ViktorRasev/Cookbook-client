@@ -1,13 +1,16 @@
 import styles from "../css/AddNewIngredientModal.module.css";
 import Icon from "@mdi/react";
 import { mdiPlus } from "@mdi/js";
-import { Modal, Form, Button } from "react-bootstrap";
+import { Modal, Form } from "react-bootstrap";
 import { useState, useContext } from "react"
 import IngredientsEditedContext from "../IngredientsEditedContext";
 import { nanoid } from 'nanoid'
 import { db } from "../utils/firebase"
 import { doc, setDoc } from "firebase/firestore"
 import UserContext from "../UserProvider";
+import { toast } from 'react-toastify';
+
+
 
 const AddNewIngredientModal = () => {
     const { isAuthorized } = useContext(UserContext);
@@ -18,6 +21,7 @@ const AddNewIngredientModal = () => {
         id: ""
     })
 
+    const ingredientAddedMessage = (ingredient) => toast.success(`Ingredience ${ingredient} přidána`);
     const handleShowModal = () => setShowModal(true)
     const handleCloseModal = () => setShowModal(false)
 
@@ -35,6 +39,7 @@ const AddNewIngredientModal = () => {
             await setDoc(doc(db, "ingredients", ingToAdd.id),{
                 ...ingToAdd
             })
+            ingredientAddedMessage(ingToAdd.name)
             setIngredientsEdited(prevValue => !prevValue)
         }catch(e){
             console.error(e)
@@ -78,7 +83,7 @@ const AddNewIngredientModal = () => {
                         />
                         <Form.Control.Feedback type="invalid">Zadejte název ingredience</Form.Control.Feedback>
                     </Form.Group>
-                    <Button className={styles.submit_ingredient_btn} type="submit" variant="success">Přidat</Button>
+                    <button className={styles.submit_ingredient_btn} type="submit" >Přidat</button>
                 </Form>
             </Modal>
         </>
